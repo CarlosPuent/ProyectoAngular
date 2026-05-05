@@ -1,0 +1,105 @@
+<app-modal [isOpen]="isOpen" [title]="title" size="sm" (closed)="closed.emit()">
+  @if (error()) {
+    <div class="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+      <p class="text-sm text-red-700">{{ error() }}</p>
+    </div>
+  }
+
+  @if (isView && category) {
+    <div class="space-y-4">
+      <div>
+        <p class="text-xs text-gray-500 uppercase font-medium">Name</p>
+        <p class="text-sm text-gray-900 mt-1 font-semibold">{{ category.name }}</p>
+      </div>
+
+      <div>
+        <p class="text-xs text-gray-500 uppercase font-medium">Slug</p>
+        <span
+          class="inline-block mt-1 text-xs font-mono bg-gray-100 text-gray-700 px-2 py-1 rounded"
+        >
+          {{ category.slug }}
+        </span>
+      </div>
+
+      @if (category.description) {
+        <div>
+          <p class="text-xs text-gray-500 uppercase font-medium">Description</p>
+          <p class="text-sm text-gray-700 mt-1">{{ category.description }}</p>
+        </div>
+      }
+
+      <div>
+        <p class="text-xs text-gray-500 uppercase font-medium">Created</p>
+        <p class="text-sm text-gray-700 mt-1">{{ category.createdAt | date: 'medium' }}</p>
+      </div>
+
+      <div class="flex justify-end pt-2">
+        <button
+          type="button"
+          (click)="closed.emit()"
+          class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  } @else {
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="space-y-4">
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Name *</label>
+        <input
+          formControlName="name"
+          type="text"
+          placeholder="Electronics"
+          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+          [class.border-red-400]="form.get('name')?.invalid && form.get('name')?.touched"
+        />
+        @if (form.get('name')?.invalid && form.get('name')?.touched) {
+          <p class="text-xs text-red-500 mt-1">Name is required</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Slug *</label>
+        <input
+          formControlName="slug"
+          type="text"
+          placeholder="electronics"
+          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm font-mono focus:outline-none focus:ring-2 focus:ring-purple-500"
+          [class.border-red-400]="form.get('slug')?.invalid && form.get('slug')?.touched"
+        />
+        <p class="text-xs text-gray-400 mt-1">Lowercase letters, numbers and hyphens only</p>
+        @if (form.get('slug')?.invalid && form.get('slug')?.touched) {
+          <p class="text-xs text-red-500 mt-1">Valid slug required</p>
+        }
+      </div>
+
+      <div>
+        <label class="block text-sm font-medium text-gray-700 mb-1.5">Description</label>
+        <textarea
+          formControlName="description"
+          rows="3"
+          placeholder="Category description..."
+          class="w-full px-4 py-2.5 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+        ></textarea>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button
+          type="button"
+          (click)="closed.emit()"
+          class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Cancel
+        </button>
+        <button
+          type="submit"
+          [disabled]="loading()"
+          class="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 disabled:opacity-60 transition-colors"
+        >
+          {{ loading() ? 'Saving...' : mode === 'edit' ? 'Save Changes' : 'Create Category' }}
+        </button>
+      </div>
+    </form>
+  }
+</app-modal>

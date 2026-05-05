@@ -1,0 +1,238 @@
+<div class="space-y-4">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">Products</h2>
+      <p class="text-sm text-gray-500 mt-0.5">{{ response()?.total ?? 0 }} total products</p>
+    </div>
+    <button
+      (click)="openCreate()"
+      class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
+    >
+      <span>+</span> New Product
+    </button>
+  </div>
+
+  <!-- Filters -->
+  <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+    <div class="flex flex-wrap gap-3">
+      <input
+        type="text"
+        placeholder="Search products..."
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event)"
+        (keyup.enter)="onSearch()"
+        class="flex-1 min-w-48 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      />
+      <select
+        [ngModel]="selectedCategory()"
+        (ngModelChange)="selectedCategory.set($event); onCategoryFilter()"
+        class="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+      >
+        <option value="">All Categories</option>
+        @for (cat of categories(); track cat.id) {
+          <option [value]="cat.id">{{ cat.name }}</option>
+        }
+      </select>
+      <button
+        (click)="onSearch()"
+        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors"
+      >
+        Search
+      </button>
+      @if (search() || selectedCategory()) {
+        <button
+          (click)="clearFilters()"
+          class="px-4 py-2 border border-gray-300 text-gray-600 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Clear
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    @if (loading()) {
+      <div class="flex items-center justify-center py-16">
+        <div class="text-center">
+          <div
+            class="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"
+          ></div>
+          <p class="text-sm text-gray-500">Loading products...</p>
+        </div>
+      </div>
+    } @else if (error()) {
+      <div class="flex items-center justify-center py-16">
+        <p class="text-red-500 text-sm">{{ error() }}</p>
+      </div>
+    } @else if (!response()?.data?.length) {
+      <div class="flex flex-col items-center justify-center py-16 text-center">
+        <span class="text-5xl mb-3">📦</span>
+        <p class="text-gray-500 font-medium">No products found</p>
+        <p class="text-gray-400 text-sm mt-1">Try adjusting your search or filters</p>
+      </div>
+    } @else {
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-100">
+              <th
+                class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >
+                Product
+              </th>
+              <th
+                class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >
+                Categories
+              </th>
+              <th
+                class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >
+                Price
+              </th>
+              <th
+                class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >
+                Stock
+              </th>
+              <th
+                class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >
+                Status
+              </th>
+              <th
+                class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+              >
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-50">
+            @for (product of response()?.data; track product.id) {
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="px-6 py-4">
+                  <p class="text-sm font-medium text-gray-900">{{ product.name }}</p>
+                  <p class="text-xs text-gray-400 mt-0.5 truncate max-w-xs">
+                    {{ product.description }}
+                  </p>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex flex-wrap gap-1">
+                    @for (cat of product.categories; track cat.id) {
+                      <app-badge [label]="cat.name" color="blue" />
+                    }
+                    @if (!product.categories?.length) {
+                      <span class="text-xs text-gray-400">—</span>
+                    }
+                  </div>
+                </td>
+                <td class="px-6 py-4">
+                  <span class="text-sm font-semibold text-gray-900">
+                    ${{ product.price | number: '1.2-2' }}
+                  </span>
+                </td>
+                <td class="px-6 py-4">
+                  <app-badge
+                    [label]="product.stock + ' units'"
+                    [color]="product.stock > 10 ? 'green' : product.stock > 0 ? 'yellow' : 'red'"
+                  />
+                </td>
+                <td class="px-6 py-4">
+                  <app-badge
+                    [label]="product.isActive ? 'Active' : 'Inactive'"
+                    [color]="product.isActive ? 'green' : 'red'"
+                  />
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex items-center justify-end gap-2">
+                    <button
+                      (click)="openView(product)"
+                      class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                      title="View"
+                    >
+                      👁️
+                    </button>
+                    <button
+                      (click)="openEdit(product)"
+                      class="p-1.5 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                      title="Edit"
+                    >
+                      ✏️
+                    </button>
+                    <button
+                      (click)="openDelete(product)"
+                      class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                      title="Delete"
+                    >
+                      🗑️
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            }
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pagination -->
+      @if ((response()?.totalPages ?? 0) > 1) {
+        <div class="flex items-center justify-between px-6 py-4 border-t border-gray-100">
+          <p class="text-sm text-gray-500">
+            Page {{ currentPage() }} of {{ response()?.totalPages }}
+          </p>
+          <div class="flex items-center gap-1">
+            <button
+              (click)="goToPage(currentPage() - 1)"
+              [disabled]="!response()?.hasPrevPage"
+              class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              ←
+            </button>
+            @for (page of pages; track page) {
+              <button
+                (click)="goToPage(page)"
+                [class]="
+                  page === currentPage()
+                    ? 'bg-blue-600 text-white border-blue-600'
+                    : 'border-gray-300 hover:bg-gray-50 text-gray-700'
+                "
+                class="px-3 py-1.5 text-sm border rounded-lg transition-colors"
+              >
+                {{ page }}
+              </button>
+            }
+            <button
+              (click)="goToPage(currentPage() + 1)"
+              [disabled]="!response()?.hasNextPage"
+              class="px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:bg-gray-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              →
+            </button>
+          </div>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+<!-- Product Modal -->
+<app-product-modal
+  [isOpen]="showModal()"
+  [product]="selectedProduct()"
+  [mode]="modalMode()"
+  [categories]="categories()"
+  (closed)="showModal.set(false)"
+  (saved)="onModalSaved()"
+/>
+
+<!-- Confirm Delete -->
+<app-confirm-dialog
+  [isOpen]="showConfirm()"
+  title="Delete Product"
+  [message]="'Are you sure you want to delete ' + (selectedProduct()?.name ?? '') + '?'"
+  confirmLabel="Delete"
+  (confirmed)="confirmDelete()"
+  (cancelled)="showConfirm.set(false)"
+/>

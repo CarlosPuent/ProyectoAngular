@@ -1,0 +1,156 @@
+<div class="space-y-4">
+  <!-- Header -->
+  <div class="flex items-center justify-between">
+    <div>
+      <h2 class="text-2xl font-bold text-gray-900">Categories</h2>
+      <p class="text-sm text-gray-500 mt-0.5">{{ filtered().length }} categories</p>
+    </div>
+    <button
+      (click)="openCreate()"
+      class="px-4 py-2 bg-purple-600 text-white text-sm font-medium rounded-lg hover:bg-purple-700 transition-colors flex items-center gap-2"
+    >
+      <span>+</span> New Category
+    </button>
+  </div>
+
+  <!-- Search -->
+  <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+    <div class="flex gap-3">
+      <input
+        type="text"
+        placeholder="Search categories..."
+        [ngModel]="search()"
+        (ngModelChange)="search.set($event); onSearch()"
+        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+      />
+      @if (search()) {
+        <button
+          (click)="clearSearch()"
+          class="px-4 py-2 border border-gray-300 text-gray-600 text-sm rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Clear
+        </button>
+      }
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
+    @if (loading()) {
+      <div class="flex items-center justify-center py-16">
+        <div class="text-center">
+          <div
+            class="w-8 h-8 border-4 border-purple-600 border-t-transparent rounded-full animate-spin mx-auto mb-2"
+          ></div>
+          <p class="text-sm text-gray-500">Loading categories...</p>
+        </div>
+      </div>
+    } @else if (!filtered().length) {
+      <div class="flex flex-col items-center justify-center py-16">
+        <span class="text-5xl mb-3">🏷️</span>
+        <p class="text-gray-500 font-medium">No categories found</p>
+        <p class="text-gray-400 text-sm mt-1">Create your first category</p>
+      </div>
+    } @else {
+      <table class="w-full">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-100">
+            <th
+              class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Name
+            </th>
+            <th
+              class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Slug
+            </th>
+            <th
+              class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Description
+            </th>
+            <th
+              class="text-left px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Created
+            </th>
+            <th
+              class="text-right px-6 py-3 text-xs font-semibold text-gray-500 uppercase tracking-wider"
+            >
+              Actions
+            </th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-50">
+          @for (category of filtered(); track category.id) {
+            <tr class="hover:bg-gray-50 transition-colors">
+              <td class="px-6 py-4">
+                <p class="text-sm font-semibold text-gray-900">{{ category.name }}</p>
+              </td>
+              <td class="px-6 py-4">
+                <span class="text-xs font-mono bg-gray-100 text-gray-700 px-2 py-1 rounded">
+                  {{ category.slug }}
+                </span>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm text-gray-500 truncate max-w-xs">
+                  {{ category.description || '—' }}
+                </p>
+              </td>
+              <td class="px-6 py-4">
+                <p class="text-sm text-gray-500">
+                  {{ category.createdAt | date: 'mediumDate' }}
+                </p>
+              </td>
+              <td class="px-6 py-4">
+                <div class="flex items-center justify-end gap-2">
+                  <button
+                    (click)="openView(category)"
+                    class="p-1.5 text-gray-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                    title="View"
+                  >
+                    👁️
+                  </button>
+                  <button
+                    (click)="openEdit(category)"
+                    class="p-1.5 text-gray-400 hover:text-yellow-600 hover:bg-yellow-50 rounded-lg transition-colors"
+                    title="Edit"
+                  >
+                    ✏️
+                  </button>
+                  <button
+                    (click)="openDelete(category)"
+                    class="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Delete"
+                  >
+                    🗑️
+                  </button>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    }
+  </div>
+</div>
+
+<!-- Modal -->
+<app-category-modal
+  [isOpen]="showModal()"
+  [category]="selectedCategory()"
+  [mode]="modalMode()"
+  (closed)="showModal.set(false)"
+  (saved)="onModalSaved()"
+/>
+
+<!-- Confirm Delete -->
+<app-confirm-dialog
+  [isOpen]="showConfirm()"
+  title="Delete Category"
+  [message]="'Are you sure you want to delete ' + (selectedCategory()?.name ?? '') + '?'"
+  confirmLabel="Delete"
+  (confirmed)="confirmDelete()"
+  (cancelled)="showConfirm.set(false)"
+/>

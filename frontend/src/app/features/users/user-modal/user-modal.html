@@ -1,0 +1,57 @@
+<app-modal [isOpen]="isOpen" [title]="title" size="md" (closed)="closed.emit()">
+  @if (user) {
+    <div class="space-y-4">
+      <!-- Avatar + name -->
+      <div class="flex items-center gap-4 pb-4 border-b border-gray-100">
+        <div
+          class="w-14 h-14 rounded-full bg-blue-600 flex items-center justify-center text-white text-xl font-bold"
+        >
+          {{ user.firstName?.charAt(0)?.toUpperCase() }}
+        </div>
+        <div>
+          <p class="text-lg font-semibold text-gray-900">
+            {{ user.firstName }} {{ user.lastName }}
+          </p>
+          <p class="text-sm text-gray-500">{{ user.email }}</p>
+        </div>
+      </div>
+
+      <!-- Details -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <p class="text-xs text-gray-500 uppercase font-medium">Status</p>
+          <div class="mt-1">
+            <app-badge
+              [label]="user.isActive ? 'Active' : 'Inactive'"
+              [color]="user.isActive ? 'green' : 'red'"
+            />
+          </div>
+        </div>
+        <div>
+          <p class="text-xs text-gray-500 uppercase font-medium">Joined</p>
+          <p class="text-sm text-gray-900 mt-1">{{ user.createdAt | date: 'mediumDate' }}</p>
+        </div>
+      </div>
+
+      <!-- Roles -->
+      <div>
+        <p class="text-xs text-gray-500 uppercase font-medium mb-2">Roles</p>
+        <div class="flex flex-wrap gap-2">
+          @for (role of user.roles; track role.id) {
+            <app-badge [label]="role.name" [color]="role.name === 'ADMIN' ? 'blue' : 'gray'" />
+          }
+        </div>
+      </div>
+
+      <!-- Actions -->
+      <div class="flex justify-end pt-2">
+        <button
+          (click)="closed.emit()"
+          class="px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          Close
+        </button>
+      </div>
+    </div>
+  }
+</app-modal>
