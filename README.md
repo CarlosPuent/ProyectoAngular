@@ -10,6 +10,14 @@ Fullstack application built with Angular 21 + NestJS + PostgreSQL (Supabase).
 
 ## Setup
 
+Users examples:
+
+admin@gmail.com 
+Password123
+
+user@gmail.com
+Password123
+
 ### Backend
 
 ```bash
