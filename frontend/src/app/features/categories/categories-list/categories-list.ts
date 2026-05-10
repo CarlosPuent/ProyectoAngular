@@ -32,6 +32,7 @@ export class CategoriesListComponent implements OnInit {
 
   loadCategories(): void {
     this.loading.set(true);
+    this.error.set('');
     this.categoriesService.getAll().subscribe({
       next: (data) => {
         this.categories.set(data);

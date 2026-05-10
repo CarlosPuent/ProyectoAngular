@@ -122,7 +122,7 @@ describe('LoginComponent', () => {
 
   describe('onSubmit() with valid form — HTTP error', () => {
     it('should set the error signal on HTTP failure', () => {
-      mockAuthService.login.mockReturnValue(throwError(() => ({ error: { message: { error: 'Wrong credentials' } } })));
+      mockAuthService.login.mockReturnValue(throwError(() => ({ error: { message: 'Wrong credentials' } })));
       const fixture = TestBed.createComponent(LoginComponent);
       fixture.detectChanges();
       fixture.componentInstance.form.setValue({ email: 'a@a.com', password: 'wrong1' });

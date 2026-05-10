@@ -52,7 +52,8 @@ export class DashboardComponent implements OnInit {
 
     if (this.auth.isAdmin()) {
       this.usersService.getAll().subscribe({
-        next: (res) => { cards[2].value = res.length; this.stats.set([...cards]); this.loading.set(false); },
+        next:  (res) => { cards[2].value = res.length; this.stats.set([...cards]); this.loading.set(false); },
+        error: ()    => { this.loading.set(false); },
       });
     } else {
       cards.splice(2, 1);

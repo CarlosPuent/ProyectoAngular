@@ -46,6 +46,7 @@ export class ProductsListComponent implements OnInit {
 
   loadProducts(): void {
     this.loading.set(true);
+    this.error.set('');
     this.productsService.getAll({
       page: this.currentPage(),
       limit: this.pageSize,

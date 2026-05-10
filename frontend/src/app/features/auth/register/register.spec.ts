@@ -102,7 +102,7 @@ describe('RegisterComponent', () => {
 
   describe('onSubmit() with valid form — HTTP error', () => {
     it('should set error signal from HTTP error response', () => {
-      mockAuthService.register.mockReturnValue(throwError(() => ({ error: { message: { error: 'Email already exists' } } })));
+      mockAuthService.register.mockReturnValue(throwError(() => ({ error: { message: 'Email already exists' } })));
       const fixture = TestBed.createComponent(RegisterComponent);
       fixture.detectChanges();
       fixture.componentInstance.form.setValue(validFormValue);

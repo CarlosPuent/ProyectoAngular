@@ -40,7 +40,7 @@ export class LoginComponent {
     this.auth.login(this.form.value).subscribe({
       next: () => this.router.navigate(['/dashboard']),
       error: (err) => {
-        this.error.set(err.error?.message?.error || 'Invalid credentials');
+        this.error.set(err.error?.message || 'Invalid credentials');
         this.loading.set(false);
       },
     });
