@@ -13,7 +13,10 @@
     "cy:run": "node run-cypress.js run",
     "cy:run:auth": "node run-cypress.js run --spec cypress/e2e/01-auth.cy.ts",
     "cy:run:products": "node run-cypress.js run --spec cypress/e2e/02-products.cy.ts",
-    "cy:run:categories": "node run-cypress.js run --spec cypress/e2e/03-categories.cy.ts"
+    "cy:run:categories": "node run-cypress.js run --spec cypress/e2e/03-categories.cy.ts",
+    "cy:open:demo": "node run-cypress.js open --config slowMo=150 --env TYPE_DELAY=90,DEMO_MODE=true",
+    "cy:demo:products": "node run-cypress.js run --spec cypress/e2e/02-products.cy.ts --env TYPE_DELAY=90,DEMO_MODE=true",
+    "cy:demo:all": "node run-cypress.js run --env TYPE_DELAY=70,DEMO_MODE=true"
   },
   "prettier": {
     "printWidth": 100,
