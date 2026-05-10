@@ -20,23 +20,23 @@
 
   Products CRUD
     Products page
-      √ should display the Products heading and New Product button (6400ms)
-      √ should navigate to /products via sidebar link (510ms)
+      √ should display the Products heading and New Product button (3830ms)
+      √ should navigate to /products via sidebar link (559ms)
     Create product
-      √ should create a new product successfully (6128ms)
-      √ should show validation errors when submitting an empty product form (1463ms)
+      √ should create a new product successfully (3081ms)
+      √ should show validation errors when submitting an empty product form (1181ms)
     Search and filter
-      √ should find the created product via the search box (3858ms)
-      √ should show "No products found" when search has no results (3797ms)
+      √ should find the created product via the search box (1530ms)
+      √ should show "No products found" when search has no results (1470ms)
     Edit product
-      √ should update the product name successfully (8258ms)
+      √ should update the product name successfully (3117ms)
     Delete product
-      √ should delete the product after confirm dialog (5843ms)
+      √ should delete the product after confirm dialog (2759ms)
     Dashboard integration
-      √ should show product stats on the Dashboard (1302ms)
+      √ should show product stats on the Dashboard (1119ms)
 
 
-  9 passing (38s)
+  9 passing (19s)
 
 
   (Results)
@@ -49,7 +49,7 @@
   │ Skipped:      0                                                                                │
   │ Screenshots:  0                                                                                │
   │ Video:        false                                                                            │
-  │ Duration:     37 seconds                                                                       │
+  │ Duration:     18 seconds                                                                       │
   │ Spec Ran:     02-products.cy.ts                                                                │
   └────────────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -61,7 +61,7 @@
 
        Spec                                              Tests  Passing  Failing  Pending  Skipped  
   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐
-  │ √  02-products.cy.ts                        00:37        9        9        -        -        - │
+  │ √  02-products.cy.ts                        00:18        9        9        -        -        - │
   └────────────────────────────────────────────────────────────────────────────────────────────────┘
-    √  All specs passed!                        00:37        9        9        -        -        -  
+    √  All specs passed!                        00:18        9        9        -        -        -  
 
