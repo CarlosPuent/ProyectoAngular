@@ -1,14 +1,18 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 
-export const databaseConfig = (config: ConfigService): TypeOrmModuleOptions => ({
+export const databaseConfig = (
+  config: ConfigService,
+): TypeOrmModuleOptions => ({
   type: 'postgres',
-  host: config.get<string>('DB_HOST'),
-  port: config.get<number>('DB_PORT'),
-  username: config.get<string>('DB_USER'),
-  password: config.get<string>('DB_PASS'),
-  database: config.get<string>('DB_NAME'),
+
+  url: config.getOrThrow<string>('DATABASE_URL'),
+
   entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+
   synchronize: false,
-  ssl: { rejectUnauthorized: false },
+
+  ssl: {
+    rejectUnauthorized: false,
+  },
 });
