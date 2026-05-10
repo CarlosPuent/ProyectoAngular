@@ -33,6 +33,12 @@
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "budgets": [
                 {
                   "type": "initial",
@@ -73,14 +79,8 @@
           "options": {
             "tsConfig": "tsconfig.spec.json",
             "coverageReporters": ["text", "html"],
-            "coverageInclude": [
-              "src/app/**/*.ts"
-            ],
-            "coverageExclude": [
-              "src/main.ts",
-              "src/environments/**",
-              "**/*.spec.ts"
-            ]
+            "coverageInclude": ["src/app/**/*.ts"],
+            "coverageExclude": ["src/main.ts", "src/environments/**", "**/*.spec.ts"]
           },
           "configurations": {
             "coverage": {
