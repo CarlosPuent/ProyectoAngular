@@ -16,8 +16,8 @@ export default defineConfig({
     viewportHeight: 720,
     retries: { runMode: 1, openMode: 0 },
     env: {
-      TEST_EMAIL: 'admin@test.com',
-      TEST_PASSWORD: 'admin123',
+      TEST_EMAIL: 'admin@gmail.com',
+      TEST_PASSWORD: 'Password123',
     },
   },
 });
