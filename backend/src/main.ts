@@ -7,14 +7,25 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   app.enableCors({
-    origin: [
+  origin: (origin, callback) => {
+    const allowedOrigins = [
       'http://localhost:4200',
       'https://proyecto-angular-ten-pi.vercel.app',
-      'https://proyecto-angular-m0l5f8l8q-puente-s-projects.vercel.app',
-    ],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
-    credentials: true,
-  });
+    ];
+
+    if (
+      !origin ||
+      allowedOrigins.includes(origin) ||
+      origin.endsWith('.vercel.app')
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
+  credentials: true,
+});
 
   app.setGlobalPrefix('api');
 
