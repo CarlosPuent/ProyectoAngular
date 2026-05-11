@@ -46,7 +46,7 @@ Built as an academic showcase of modern web development practices across the ful
 | Role | Email | Password |
 |------|-------|----------|
 | Admin | admin@gmail.com | Password123 |
-| User | user@gmail.com | Password123 |
+| User | user@email.com | Password123 |
 
 > **Note:** The backend runs on Render's free tier — the first request after inactivity may take ~30 seconds to wake up.
 
