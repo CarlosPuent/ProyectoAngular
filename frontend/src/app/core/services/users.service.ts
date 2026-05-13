@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { User, AssignRoleRequest } from '../models/user.model';
+import { AuthUser } from '../models/auth.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({ providedIn: 'root' })
@@ -18,8 +19,8 @@ export class UsersService {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
   }
 
-  getMe(): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/me`);
+  getMe(): Observable<AuthUser> {
+    return this.http.get<AuthUser>(`${this.apiUrl}/me`);
   }
 
   assignRole(userId: string, data: AssignRoleRequest): Observable<User> {

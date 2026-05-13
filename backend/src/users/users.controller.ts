@@ -46,6 +46,12 @@ export class UsersController {
     return this.usersService.findById(id);
   }
 
+  @Patch('me')
+  @ApiOperation({ summary: 'Update current user profile' })
+  updateMe(@GetUser() user: User, @Body() dto: UpdateProfileDto) {
+    return this.usersService.updateProfile(user.id, dto);
+  }
+
   @Patch(':id/roles')
   @Roles('ADMIN')
   @UseGuards(RolesGuard)
@@ -53,12 +59,6 @@ export class UsersController {
   assignRole(@Param('id') id: string, @Body() dto: AssignRoleDto) {
     return this.usersService.assignRole(id, dto.role);
   }
-
-  @Patch('me')
-@ApiOperation({ summary: 'Update current user profile' })
-updateMe(@GetUser() user: User, @Body() dto: UpdateProfileDto) {
-  return this.usersService.updateProfile(user.id, dto);
-}
 
   @Delete(':id/roles')
   @Roles('ADMIN')

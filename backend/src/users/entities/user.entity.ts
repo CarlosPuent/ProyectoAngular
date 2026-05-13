@@ -7,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 import { Role } from './role.entity';
 
 @Entity('users')
@@ -17,6 +18,7 @@ export class User {
   @Column({ unique: true })
   email: string;
 
+  @Exclude()
   @Column({ name: 'password_hash' })
   passwordHash: string;
 
