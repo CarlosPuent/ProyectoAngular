@@ -7,6 +7,12 @@ import { HttpExceptionFilter } from './common/filters/http-exception.filter';
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
+  // Fix para ERR_EMPTY_RESPONSE en Cypress
+  app.use((req: any, res: any, next: any) => {
+    res.setHeader('Connection', 'close');
+    next();
+  });
+
   const allowedOrigins = process.env.ALLOWED_ORIGINS;
   app.enableCors({
     origin: allowedOrigins ? allowedOrigins.split(',') : '*',
@@ -15,9 +21,7 @@ async function bootstrap() {
   });
 
   app.setGlobalPrefix('api');
-
   app.useGlobalFilters(new HttpExceptionFilter());
-
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
@@ -37,9 +41,7 @@ async function bootstrap() {
   SwaggerModule.setup('api/docs', app, document);
 
   const port = process.env.PORT ?? 3000;
-
   await app.listen(port, '0.0.0.0');
-
   console.log(`Server running on port ${port}`);
 }
 
